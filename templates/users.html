@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Пользователи{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Пользователи</h5>
+                <form class="d-flex" method="GET" action="{{ url_for('users_list') }}">
+                    <input class="form-control form-control-sm me-2" type="search" 
+                           name="search" placeholder="Поиск..." value="{{ search_query }}">
+                    <button class="btn btn-sm btn-outline-light" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for user in users %}
+                <div class="col-md-6 col-lg-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <img src="{{ url_for('static', filename='img/avatars/' + user.avatar) }}" 
+                                 class="avatar-md rounded-circle mb-3">
+                            <h5>{{ user.first_name }} {{ user.last_name }}</h5>
+                            <p class="text-muted mb-2">@{{ user.username }}</p>
+                            <div class="d-flex justify-content-center">
+                                <a href="{{ url_for('profile', username=user.username) }}" 
+                                   class="btn btn-sm btn-outline-primary me-2">
+                                    Профиль
+                                </a>
+                                <a href="{{ url_for('conversation', user_id=user.id) }}" 
+                                   class="btn btn-sm btn-primary">
+                                    Написать
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-people fs-1 text-muted mb-3"></i>
+                    <h5>Пользователи не найдены</h5>
+                    <p class="text-muted">Попробуйте изменить параметры поиска</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

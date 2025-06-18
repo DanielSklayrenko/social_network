@@ -1,0 +1,62 @@
+:root {
+    --primary: #4361ee;
+    --primary-dark: #3a0ca3;
+    --secondary: #3f37c9;
+    --light: #f8f9fa;
+    --dark: #212529;
+}
+
+body {
+    background-color: #f5f7fb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.avatar {
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.avatar-xs { width: 32px; height: 32px; }
+.avatar-sm { width: 48px; height: 48px; }
+.avatar-md { width: 80px; height: 80px; }
+.avatar-lg { width: 120px; height: 120px; }
+.avatar-xl { width: 160px; height: 160px; }
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.profile-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-radius: 0 0 20px 20px;
+}
+
+.message-sent {
+    background: var(--primary);
+    color: white;
+    border-radius: 18px 18px 4px 18px;
+}
+
+.message-received {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 18px 18px 18px 4px;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        padding: 1.5rem 0;
+    }
+}

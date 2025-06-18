@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='img/avatars/' + user.avatar) }}" 
+                         class="avatar-lg rounded-circle mb-3">
+                    <h4>{{ user.first_name }} {{ user.last_name }}</h4>
+                    <p class="text-muted">@{{ user.username }}</p>
+                    <a href="{{ url_for('profile', username=user.username) }}" 
+                       class="btn btn-primary btn-sm">
+                        Мой профиль
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h5>Быстрые действия</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('messages') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-chat-left-text me-2"></i> Мои сообщения
+                    </a>
+                    <a href="{{ url_for('friends_list') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-people me-2"></i> Мои друзья
+                    </a>
+                    <a href="{{ url_for('users_list') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-search me-2"></i> Найти друзей
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Новости</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        Добро пожаловать в моё чат-приложение!
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('users_list') }}" class="btn btn-outline-primary">
+                            Начать поиск друзей
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Чат с {{ interlocutor.username }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4 d-none d-md-block">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5>Диалоги</h5>
+                </div>
+                <div class="list-group list-group-flush" style="max-height: 600px; overflow-y: auto;">
+                    {% for dialogue in dialogues %}
+                    <a href="{{ url_for('conversation', user_id=dialogue.id) }}" 
+                       class="list-group-item list-group-item-action">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ url_for('static', filename='img/avatars/' + dialogue.avatar) }}" 
+                                 class="avatar-sm rounded-circle me-3">
+                            <div>
+                                <h6 class="mb-0">{{ dialogue.username }}</h6>
+                                <small class="text-muted">{{ dialogue.last_time }}</small>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ url_for('static', filename='img/avatars/' + interlocutor.avatar) }}" 
+                             class="avatar-sm rounded-circle me-3">
+                        <h5 class="mb-0">{{ interlocutor.username }}</h5>
+                    </div>
+                    <a href="{{ url_for('profile', username=interlocutor.username) }}" 
+                       class="btn btn-sm btn-outline-light">
+                        Профиль
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="chat-messages p-3" id="messages-container" 
+                         style="height: 400px; overflow-y: auto;">
+                        {% for message in messages %}
+                        <div class="mb-3 {% if message.sender_id == session['user_id'] %}text-end{% endif %}">
+                            <div class="d-flex {% if message.sender_id == session['user_id'] %}justify-content-end{% else %}justify-content-start{% endif %}">
+                                {% if message.sender_id != session['user_id'] %}
+                                <img src="{{ url_for('static', filename='img/avatars/' + message.sender_avatar) }}" 
+                                     class="avatar-xs rounded-circle me-2">
+                                {% endif %}
+                                <div>
+                                    <div class="p-3 rounded {% if message.sender_id == session['user_id'] %}bg-primary text-white{% else %}bg-light{% endif %}">
+                                        {{ message.content }}
+                                    </div>
+                                    <small class="text-muted">{{ message.sent_at }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer">
+                        <form method="POST" class="d-flex">
+                            <input type="text" class="form-control me-2" name="content" 
+                                   placeholder="Напишите сообщение..." required>
+                            <button type="submit" class="btn btn-primary">Отправить</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Автопрокрутка вниз
+    window.onload = function() {
+        const container = document.getElementById('messages-container');
+        container.scrollTop = container.scrollHeight;
+    };
+</script>
+{% endblock %}

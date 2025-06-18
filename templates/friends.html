@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Мои друзья{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Мои друзья</h5>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs mb-4" id="friendsTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" 
+                            data-bs-target="#all" type="button">
+                        Все друзья ({{ friends_count }})
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="requests-tab" data-bs-toggle="tab" 
+                            data-bs-target="#requests" type="button">
+                        Запросы ({{ pending_requests_count }})
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="friendsTabsContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel">
+                    {% if friends %}
+                    <div class="row">
+                        {% for friend in friends %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <img src="{{ url_for('static', filename='img/avatars/' + friend.avatar) }}" 
+                                         class="avatar-md rounded-circle mb-3">
+                                    <h5>{{ friend.first_name }} {{ friend.last_name }}</h5>
+                                    <p class="text-muted mb-2">@{{ friend.username }}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="{{ url_for('profile', username=friend.username) }}" 
+                                           class="btn btn-sm btn-outline-primary me-2">
+                                            Профиль
+                                        </a>
+                                        <a href="{{ url_for('conversation', user_id=friend.id) }}" 
+                                           class="btn btn-sm btn-primary">
+                                            Написать
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-people fs-1 text-muted mb-3"></i>
+                        <h5>У вас пока нет друзей</h5>
+                        <p class="text-muted">Найдите друзей и отправьте им запрос</p>
+                        <a href="{{ url_for('users_list') }}" class="btn btn-primary">
+                            Найти друзей
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="tab-pane fade" id="requests" role="tabpanel">
+                    {% if pending_requests %}
+                    <div class="row">
+                        {% for request in pending_requests %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <img src="{{ url_for('static', filename='img/avatars/' + request.avatar) }}" 
+                                         class="avatar-md rounded-circle mb-3">
+                                    <h5>{{ request.first_name }} {{ request.last_name }}</h5>
+                                    <p class="text-muted mb-2">@{{ request.username }}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <form method="POST" 
+                                              action="{{ url_for('accept_friend', friend_id=request.id) }}" 
+                                              class="me-2">
+                                            <input type="hidden" name="username" value="{{ request.username }}">
+                                            <button type="submit" class="btn btn-sm btn-success">
+                                                Принять
+                                            </button>
+                                        </form>
+                                        <form method="POST" 
+                                              action="{{ url_for('remove_friend', friend_id=request.id) }}">
+                                            <input type="hidden" name="username" value="{{ request.username }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                                Отклонить
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-person-plus fs-1 text-muted mb-3"></i>
+                        <h5>Нет новых запросов</h5>
+                        <p class="text-muted">Здесь будут отображаться входящие запросы на дружбу</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

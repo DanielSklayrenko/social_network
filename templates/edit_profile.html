@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Редактирование профиля</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="row mb-4">
+                            <div class="col-md-4 text-center">
+                                <img src="{{ url_for('static', filename='img/avatars/' + user.avatar) }}" 
+                                     class="avatar-lg rounded-circle mb-3" id="avatar-preview">
+                                <div class="mb-3">
+                                    <label for="avatar" class="form-label">Изменить аватар</label>
+                                    <input class="form-control" type="file" id="avatar" name="avatar" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label for="first_name" class="form-label">Имя</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" 
+                                           value="{{ user.first_name or '' }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="last_name" class="form-label">Фамилия</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" 
+                                           value="{{ user.last_name or '' }}">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="about" class="form-label">О себе</label>
+                            <textarea class="form-control" id="about" name="about" rows="5">{{ user.about or '' }}</textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{{ url_for('profile', username=user.username) }}" class="btn btn-secondary me-md-2">
+                                Отмена
+                            </a>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('avatar').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatar-preview').src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+{% endblock %}
